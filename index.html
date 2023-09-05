@@ -1,0 +1,52 @@
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!--IMPORTANDO A BIBLIOTECA AXIOS-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Projeto NLP</title>
+</head>
+<body> <!--CORPO DA PÁGINA-->
+    <div>
+        <h1>Mexendo com dicionário de livros</h1>
+        <div>                                                               
+            <label>O que deseja fazer?</label>
+            <button id="btnGetLivros">Receber os livros</button>
+        </div>
+        <!-- Div para exibir a resposta da API -->
+        <div id="livros"></div>
+    </div>
+
+    <!-- Texto em JavaScript abaixo:  -->
+    <script>
+        // Função para fazer a solicitação à API
+        function get_livros() {
+            axios.get('http://localhost:5000/livros')
+                .then(response => {
+                    const livros = response.data; // Assume que a resposta é um array de objetos de livro
+                    console.log(response.data);
+                    // Encontra a div com o id "livros" para adicionar os resultados
+                    const livrosDiv = document.getElementById('livros');
+                    livrosDiv.innerHTML = ''; // Limpa o conteúdo anterior, se houver
+
+                    // Itera pelos livros e cria elementos HTML para cada um
+                    livros.forEach(livro => {
+                        // Cria um elemento de parágrafo para exibir cada livro
+                        const livroElement = document.createElement('p');
+
+                        // Construa o conteúdo do elemento de parágrafo com informações do livro
+                        livroElement.textContent = `Título: ${livro.titulo}, Autor: ${livro.autor}`;
+
+                        // Adiciona o elemento do livro à div "livros"
+                        livrosDiv.appendChild(livroElement);
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        // Adiciona um ouvinte de evento ao botão para chamar a função quando clicado
+        const btnGetLivros = document.getElementById('btnGetLivros');
+        btnGetLivros.addEventListener('click', get_livros);
+    </script>
+</body>
+</html>
